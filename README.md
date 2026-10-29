@@ -31,8 +31,8 @@ index.html          the page
 assets/styles.css   all styling
 assets/app.js       scroll reveal, YouTube facade, GitHub API reads
 assets/luau.svg     Luau mark, official
-assets/nodeal.png   supplied Nodeal logo used across the site
-assets/nodeal.svg   original Nodeal wordmark, retained
+assets/nodeal.svg   self-contained Nodeal icon used across the site
+assets/nodeal.png   supplied Nodeal bitmap, retained as provided
 assets/mark.svg     favicon, the rotated square motif
 enhancedreplication.mp4  Studio replication recording
 npc-system.mp4           Studio NPC recording
@@ -42,8 +42,7 @@ DESIGN.md           the design direction and the reason for each choice
 ## Where the assets come from
 
 - Luau mark: `luau-lang/site`, `src/assets/images/luau-logo.svg`, MIT.
-- Nodeal icon: supplied by the site owner as `assets/nodeal.png`.
-- Original Nodeal wordmark: `nodeal-framework/.github`, `assets/nodeal.svg` (retained but no longer used on the page).
+- Nodeal icon: self-contained vector mark in `assets/nodeal.svg`; the supplied bitmap remains at `assets/nodeal.png`.
 - Profile data and repository list: the public GitHub API, read in the browser at page load. Nothing is hardcoded, so the section always shows the live state. If the API is rate limited or unreachable, the page says so and links to GitHub instead.
 
 The YouTube thumbnail tries the high-resolution image first, then falls back to the standard thumbnail; if neither is available, a text fallback still lets visitors play the video. After playback starts, a direct YouTube link remains available if the embed cannot load.
