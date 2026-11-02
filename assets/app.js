@@ -1,7 +1,7 @@
 /* Lucas (@thelucas128) portfolio.
-   Four jobs: render the work list from assets/work.json, reveal on scroll,
+   Five jobs: render the work list from assets/work.json, reveal on scroll,
    load the YouTube player on click, read the GitHub profile and repositories
-   from the public API with a local cache so a rate limit does not blank the page. */
+   from the public API with a local cache, and draw the reactive web background. */
 
 (() => {
   'use strict';
@@ -211,6 +211,35 @@
     return wrap;
   }
 
+  function renderVideoList(list) {
+    const wrap = node('div', { class: 'entry-media' });
+    const stack = node('div', { class: 'video-stack' });
+
+    list.forEach((clip) => {
+      if (!clip || !clip.src) return;
+      const item = node('div', { class: 'video-item' });
+      const video = node('video', {
+        controls: '',
+        preload: 'metadata',
+        playsinline: '',
+        width: '1920',
+        height: '1080'
+      });
+      video.append(
+        node('source', { src: clip.src, type: 'video/mp4' }),
+        document.createTextNode('Your browser cannot play this MP4. '),
+        node('a', { href: clip.src }, 'Download the recording'),
+        document.createTextNode('.')
+      );
+      item.append(video);
+      if (clip.label) item.append(node('p', { class: 'video-cap' }, clip.label));
+      stack.append(item);
+    });
+
+    wrap.append(stack);
+    return wrap;
+  }
+
   function renderText(entry) {
     const wrap = node('div', { class: 'entry-text' });
     (entry.text || []).forEach((paragraph) => wrap.append(node('p', { class: 'entry-desc' }, paragraph)));
@@ -251,9 +280,8 @@
   }
 
   function renderEntry(entry, index) {
-    const layout = entry.layout ? ' ' + entry.layout : '';
-    const item = node('li', { class: 'entry entry--' + (layout.trim() || 'full') + ' reveal' });
-    item.style.setProperty('--entry-index', String(index));
+    const layout = entry.layout || 'full';
+    const item = node('li', { class: 'entry entry--' + layout + ' reveal' });
 
     const head = node('div', { class: 'entry-head' });
     head.append(
@@ -266,6 +294,7 @@
     const blocks = [];
     if (entry.text || entry.note || entry.links) blocks.push({ kind: 'text', el: renderText(entry) });
     if (entry.media) blocks.push({ kind: 'media', el: renderMedia(entry.media) });
+    if (entry.videos && entry.videos.length) blocks.push({ kind: 'media', el: renderVideoList(entry.videos) });
     if (entry.detections) blocks.push({ kind: 'detections', el: renderDetections(entry.detections) });
 
     if (entry.mediaFirst) blocks.sort((a, b) => (a.kind === 'media' ? -1 : b.kind === 'media' ? 1 : 0));
@@ -487,10 +516,149 @@
     }
   }
 
+  /* ---------- reactive web background ---------- */
+
+  function initWeb() {
+    const canvas = document.querySelector('.web-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const LINK_DIST = 152;
+    const CURSOR_DIST = 190;
+    const COLOR = '124, 151, 245';
+
+    let width = 0;
+    let height = 0;
+    let nodes = [];
+    let frame = 0;
+    const pointer = { x: -9999, y: -9999, active: false };
+
+    function makeNodes() {
+      const count = Math.max(24, Math.min(84, Math.round((width * height) / 24000)));
+      nodes = Array.from({ length: count }, () => ({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.16,
+        vy: (Math.random() - 0.5) * 0.16
+      }));
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, width, height);
+
+      for (let i = 0; i < nodes.length; i++) {
+        const a = nodes[i];
+
+        for (let j = i + 1; j < nodes.length; j++) {
+          const b = nodes[j];
+          const dx = a.x - b.x;
+          const dy = a.y - b.y;
+          const d = Math.sqrt(dx * dx + dy * dy);
+          if (d > LINK_DIST) continue;
+          const alpha = 0.15 * (1 - d / LINK_DIST);
+          ctx.strokeStyle = 'rgba(' + COLOR + ',' + alpha.toFixed(3) + ')';
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.stroke();
+        }
+
+        if (pointer.active) {
+          const pdx = a.x - pointer.x;
+          const pdy = a.y - pointer.y;
+          const pd = Math.sqrt(pdx * pdx + pdy * pdy);
+          if (pd < CURSOR_DIST) {
+            const alpha = 0.36 * (1 - pd / CURSOR_DIST);
+            ctx.strokeStyle = 'rgba(' + COLOR + ',' + alpha.toFixed(3) + ')';
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(pointer.x, pointer.y);
+            ctx.stroke();
+          }
+        }
+
+        ctx.fillStyle = 'rgba(' + COLOR + ',0.55)';
+        ctx.beginPath();
+        ctx.arc(a.x, a.y, 1.1, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    function step() {
+      for (const n of nodes) {
+        n.x += n.vx;
+        n.y += n.vy;
+
+        if (pointer.active) {
+          const dx = n.x - pointer.x;
+          const dy = n.y - pointer.y;
+          const d = Math.sqrt(dx * dx + dy * dy);
+          if (d < CURSOR_DIST && d > 0.001) {
+            const push = (1 - d / CURSOR_DIST) * 0.45;
+            n.x += (dx / d) * push;
+            n.y += (dy / d) * push;
+          }
+        }
+
+        if (n.x < -24) n.x = width + 24;
+        else if (n.x > width + 24) n.x = -24;
+        if (n.y < -24) n.y = height + 24;
+        else if (n.y > height + 24) n.y = -24;
+      }
+
+      draw();
+      frame = window.requestAnimationFrame(step);
+    }
+
+    function resize() {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      width = canvas.clientWidth;
+      height = canvas.clientHeight;
+      if (!width || !height) return;
+      canvas.width = Math.round(width * dpr);
+      canvas.height = Math.round(height * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      makeNodes();
+      draw();
+    }
+
+    resize();
+
+    if (reduced) return;
+
+    frame = window.requestAnimationFrame(step);
+
+    window.addEventListener('pointermove', (event) => {
+      pointer.x = event.clientX;
+      pointer.y = event.clientY;
+      pointer.active = true;
+    }, { passive: true });
+
+    window.addEventListener('pointerleave', () => { pointer.active = false; });
+
+    let resizeTimer = 0;
+    window.addEventListener('resize', () => {
+      window.clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(resize, 150);
+    });
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        window.cancelAnimationFrame(frame);
+        frame = 0;
+      } else if (!frame) {
+        frame = window.requestAnimationFrame(step);
+      }
+    });
+  }
+
   /* ---------- boot ---------- */
 
   observeReveals(document);
   bindFacades(document);
+  initWeb();
   loadWork();
   loadGithub();
 })();

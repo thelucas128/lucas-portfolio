@@ -50,6 +50,16 @@ Structure is carried by horizontal hairlines and mono numbers, like a package in
 - **RHYTHM 3**: sections do not repeat a shape. The hero is a two-column split, the work entries alternate media-left, media-right, and full-width, and the repo entry has no media at all and carries a detection grid instead. The GitHub block is a profile panel beside a plain list.
 - **MOTION 2**: a single scroll reveal and standard hover/focus transitions. No loops, no parallax, no auto-playing video, everything stops under `prefers-reduced-motion: reduce`.
 
+## Owner-directed additions
+
+- The reactive web background was requested after the first build. It is drawn on
+  one fixed canvas in the accent colour at low alpha, it never sits above
+  content, and it freezes to a single static frame under
+  `prefers-reduced-motion: reduce`, so the motion dial still holds for anyone
+  who asks for less motion.
+- Entry 04 carries three captioned antiexploit recordings in a stack, mono
+  captions like every other piece of data on the page.
+
 ## Content rules for this build
 
 - Every number on the page is from the `nodeal-antiexploit` README or the GitHub API. Nothing is estimated.

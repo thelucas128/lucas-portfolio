@@ -35,7 +35,7 @@ The page uses relative paths only, so it works from a subfolder such as `https:/
 
 `.nojekyll` is included so Pages serves the folder as-is instead of running Jekyll over it.
 
-Keep the MP4s in the repository. GitHub accepts files up to 100 MB each and the whole folder is about 13 MB, so there is no need for Git LFS here. Pages is case-sensitive while Windows is not: all filenames are already lowercase, so keep them that way when adding files.
+Keep the MP4s in the repository. GitHub accepts files up to 100 MB each and the whole folder is about 45 MB, so there is no need for Git LFS here. Pages is case-sensitive while Windows is not: all filenames are already lowercase, so keep them that way when adding files.
 
 ## Structure
 
@@ -50,6 +50,9 @@ assets/nodeal.png   supplied Nodeal bitmap, retained as provided
 assets/mark.svg     favicon, the rotated square motif
 enhancedreplication.mp4  Studio replication recording
 npc-system.mp4           Studio NPC recording
+gc-detection.mp4         antiexploit, GC detection
+env-leak-require.mp4     antiexploit, env leak via require
+env-leak-gc-call.mp4     antiexploit, env leak via GC call
 DESIGN.md           the design direction and the reason for each choice
 ```
 

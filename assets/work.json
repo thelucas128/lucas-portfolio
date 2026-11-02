@@ -70,6 +70,11 @@
         },
         { "label": "Nodeal package", "href": "https://www.nodeal.dev/packages/antiexploit" }
       ],
+      "videos": [
+        { "src": "gc-detection.mp4", "label": "GC detection" },
+        { "src": "env-leak-require.mp4", "label": "Env leak via require" },
+        { "src": "env-leak-gc-call.mp4", "label": "Env leak via GC call" }
+      ],
       "detections": {
         "title": "Detections",
         "version": "antiexploit v1.3",

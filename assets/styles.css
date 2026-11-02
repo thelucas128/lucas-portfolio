@@ -729,3 +729,42 @@ h1 {
   .entry-desc--note { padding-left: 0.75rem; }
   .site-foot { flex-direction: column; align-items: flex-start; }
 }
+
+/* ---------- reactive web background ---------- */
+
+.web-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .web-canvas { opacity: 0.4; }
+}
+
+/* ---------- clip stack (antiexploit recordings) ---------- */
+
+.video-stack { display: grid; gap: 0.85rem; }
+
+.video-item {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.video-item video { width: 100%; height: auto; display: block; }
+
+.video-cap {
+  margin: 0;
+  padding: 0.55rem 0.7rem;
+  border-top: 1px solid var(--line-soft);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.01em;
+  color: var(--muted);
+}
