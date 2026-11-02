@@ -212,18 +212,20 @@
   }
 
   function renderVideoList(list) {
+    const clips = (list || []).filter((clip) => clip && clip.src);
     const wrap = node('div', { class: 'entry-media' });
-    const stack = node('div', { class: 'video-stack' });
+    const grid = node('div', { class: 'video-grid' });
 
-    list.forEach((clip) => {
-      if (!clip || !clip.src) return;
+    clips.forEach((clip, index) => {
       const item = node('div', { class: 'video-item' });
+      const frame = node('div', { class: 'video-frame' });
       const video = node('video', {
         controls: '',
         preload: 'metadata',
         playsinline: '',
         width: '1920',
-        height: '1080'
+        height: '1080',
+        'aria-label': clip.label || 'Recording ' + (index + 1)
       });
       video.append(
         node('source', { src: clip.src, type: 'video/mp4' }),
@@ -231,12 +233,13 @@
         node('a', { href: clip.src }, 'Download the recording'),
         document.createTextNode('.')
       );
-      item.append(video);
+      frame.append(video);
+      item.append(frame);
       if (clip.label) item.append(node('p', { class: 'video-cap' }, clip.label));
-      stack.append(item);
+      grid.append(item);
     });
 
-    wrap.append(stack);
+    wrap.append(grid);
     return wrap;
   }
 

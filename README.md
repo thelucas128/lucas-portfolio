@@ -20,7 +20,8 @@ touch, no build step. Each entry takes `num`, `title`, `layout`
 (`media-left`, `media-right`, `full`, `split`), `mediaFirst`, `tech`
 (`luau`, `nodeal`), `text` (array of paragraphs), optional `note`, `links`,
 `media` (`youtube` with an `id`, or `video` with a `src`), and optional
-`detections`. The section count and the note under it come from the same file.
+`videos` (an array of `{ src, label }` clips, drawn as a compact captioned
+grid), and optional `detections`. The section count and the note under it come from the same file.
 
 If `assets/work.json` cannot be read, the section shows an error line with a
 link to GitHub instead of an empty page.
@@ -61,6 +62,8 @@ DESIGN.md           the design direction and the reason for each choice
 - Luau mark: `luau-lang/site`, `src/assets/images/luau-logo.svg`, MIT.
 - Nodeal icon: self-contained vector mark in `assets/nodeal.svg`; the supplied bitmap remains at `assets/nodeal.png`.
 - Profile data and repository list: the public GitHub API, read in the browser at page load. Nothing is hardcoded, so the section always shows the live state. If the API is rate limited or unreachable, the page says so and links to GitHub instead.
+
+The antiexploit clips sit in a two-column grid inside one bordered frame; each cell keeps a 16/9 box so nothing reflows as the recordings load, and the caption row carries a 4px accent marker. Four clips fill a 2x2 grid with no CSS change, and the grid collapses to one column below 560px.
 
 The YouTube thumbnail tries the high-resolution image first, then falls back to the standard thumbnail; if neither is available, a text fallback still lets visitors play the video. After playback starts, a direct YouTube link remains available if the embed cannot load.
 

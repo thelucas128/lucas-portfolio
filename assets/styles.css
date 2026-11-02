@@ -746,25 +746,91 @@ h1 {
   .web-canvas { opacity: 0.4; }
 }
 
-/* ---------- clip stack (antiexploit recordings) ---------- */
+/* ---------- video embeds ---------- */
 
-.video-stack { display: grid; gap: 0.85rem; }
+.video-frame {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  overflow: hidden;
+}
+
+.video-frame video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #000;
+}
+
+.entry-media video { background: #000; }
+
+.entry-media video:focus-visible,
+.video-frame video:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.facade { background: #000; }
+
+.facade-play svg { transition: transform 0.2s ease; }
+.facade:hover .facade-play svg,
+.facade:focus-visible .facade-play svg { transform: scale(1.06); }
+
+/* ---------- clip grid (antiexploit recordings) ---------- */
+
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.7rem;
+  padding: 0.7rem;
+}
 
 .video-item {
+  min-width: 0;
   border: 1px solid var(--line);
   background: var(--surface);
   border-radius: var(--radius);
   overflow: hidden;
+  transition: border-color 0.2s ease, background 0.2s ease;
 }
 
-.video-item video { width: 100%; height: auto; display: block; }
+.video-item:hover,
+.video-item:focus-within {
+  border-color: #2B3648;
+  background: #0C1118;
+}
 
 .video-cap {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
   margin: 0;
-  padding: 0.55rem 0.7rem;
+  padding: 0.5rem 0.6rem;
   border-top: 1px solid var(--line-soft);
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   letter-spacing: 0.01em;
   color: var(--muted);
+}
+
+.video-cap::before {
+  content: "";
+  display: block;
+  flex: none;
+  width: 4px;
+  height: 4px;
+  background: var(--accent);
+}
+
+@media (max-width: 560px) {
+  .video-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.55rem;
+    padding: 0.55rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .video-item, .facade-play svg { transition: none; }
 }

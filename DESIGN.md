@@ -57,7 +57,7 @@ Structure is carried by horizontal hairlines and mono numbers, like a package in
   content, and it freezes to a single static frame under
   `prefers-reduced-motion: reduce`, so the motion dial still holds for anyone
   who asks for less motion.
-- Entry 04 carries three captioned antiexploit recordings in a stack, mono
+- Entry 04 carries three captioned antiexploit recordings in a compact two-up grid, mono
   captions like every other piece of data on the page.
 
 ## Content rules for this build
