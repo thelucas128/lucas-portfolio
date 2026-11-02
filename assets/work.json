@@ -1,0 +1,90 @@
+{
+  "note": "Two Studio recordings, one video on YouTube, one public repository.",
+  "entries": [
+    {
+      "num": "01",
+      "title": "BattleGround",
+      "layout": "media-left",
+      "mediaFirst": true,
+      "tech": ["luau"],
+      "media": {
+        "type": "youtube",
+        "id": "_tLy-EcOfI0",
+        "title": "BattleGround Portfolio",
+        "label": "Play BattleGround Portfolio on YouTube"
+      },
+      "text": [
+        "BattleGround, built only from open-source animations and assets. Every script in it is mine."
+      ],
+      "links": [
+        { "label": "Watch on YouTube", "href": "https://www.youtube.com/watch?v=_tLy-EcOfI0" }
+      ]
+    },
+    {
+      "num": "02",
+      "title": "EnhancedReplication",
+      "layout": "media-right",
+      "mediaFirst": false,
+      "tech": ["luau", "nodeal"],
+      "text": [
+        "A custom replication layer with ping-based prediction, replacing Roblox's default replication. Written with Nodeal, recorded in Roblox Studio."
+      ],
+      "media": {
+        "type": "video",
+        "src": "enhancedreplication.mp4",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    {
+      "num": "03",
+      "title": "NPC system",
+      "layout": "full",
+      "mediaFirst": true,
+      "tech": ["luau", "nodeal"],
+      "media": {
+        "type": "video",
+        "src": "npc-system.mp4",
+        "width": 1920,
+        "height": 1080
+      },
+      "text": [
+        "NPC system written with Nodeal. No benchmark is claimed here, because none was measured."
+      ]
+    },
+    {
+      "num": "04",
+      "title": "nodeal-antiexploit",
+      "layout": "split",
+      "mediaFirst": false,
+      "tech": ["luau", "nodeal"],
+      "text": [
+        "Client-side anti-exploit module for the Nodeal framework. It monitors exploit-sensitive hooks and client state, then kicks or destroys the local player when a check is triggered."
+      ],
+      "note": "Early beta, client-side only. Determined exploiters can bypass anything that runs on the client, so it pairs with server-side validation.",
+      "links": [
+        {
+          "label": "Read the repository",
+          "href": "https://github.com/thelucas128/nodeal-antiexploit",
+          "icon": "github"
+        },
+        { "label": "Nodeal package", "href": "https://www.nodeal.dev/packages/antiexploit" }
+      ],
+      "detections": {
+        "title": "Detections",
+        "version": "antiexploit v1.3",
+        "items": [
+          { "term": "Env leak", "detail": "getgenv in the call stack, caught through 13 hooked builtins" },
+          { "term": "Caller check", "detail": "require outside ReplicatedFirst is blocked" },
+          { "term": "Dex", "detail": "2 asset IDs, read through ContentProvider:GetAssetFetchStatus" },
+          { "term": "SimpleSpy", "detail": "3 asset IDs fingerprinted" },
+          { "term": "Anti-kick hooks", "detail": "dot vs colon call check, Workspace:Kick trap, Kick source check" },
+          { "term": "GetAssetFetchStatus hook", "detail": "a dot call has to error" },
+          { "term": "Modified env timing", "detail": "getfenv cost against a baseline, 500 iterations per sample, max ratio 5" },
+          { "term": "Honeypots", "detail": "60,000 fake functions on NetworkService, about 6.7 KB each" }
+        ],
+        "note": "10 flags before a hard kick. Source: repository README."
+      }
+    }
+  ]
+}

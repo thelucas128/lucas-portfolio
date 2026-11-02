@@ -12,6 +12,19 @@ npx serve .
 
 Any static host works (GitHub Pages, Netlify, Cloudflare Pages). The Studio recordings are stored in the repository root as `enhancedreplication.mp4` and `npc-system.mp4`. A GitHub Actions workflow is included to deploy the site to GitHub Pages automatically.
 
+## Editing the work list
+
+The entries in the Work section live in `assets/work.json`, not in `index.html`.
+Add or edit an object in `entries` and the page renders it on load: no HTML to
+touch, no build step. Each entry takes `num`, `title`, `layout`
+(`media-left`, `media-right`, `full`, `split`), `mediaFirst`, `tech`
+(`luau`, `nodeal`), `text` (array of paragraphs), optional `note`, `links`,
+`media` (`youtube` with an `id`, or `video` with a `src`), and optional
+`detections`. The section count and the note under it come from the same file.
+
+If `assets/work.json` cannot be read, the section shows an error line with a
+link to GitHub instead of an empty page.
+
 ## Deploy on GitHub Pages
 
 The page uses relative paths only, so it works from a subfolder such as `https://thelucas128.github.io/<repo>/` as well as from a user site.
@@ -27,9 +40,10 @@ Keep the MP4s in the repository. GitHub accepts files up to 100 MB each and the 
 ## Structure
 
 ```
-index.html          the page
+index.html          the page shell
+assets/work.json    the work entries, rendered at runtime
 assets/styles.css   all styling
-assets/app.js       scroll reveal, YouTube facade, GitHub API reads
+assets/app.js       renders the work list, scroll reveal, YouTube facade, GitHub reads
 assets/luau.svg     Luau mark, official
 assets/nodeal.svg   self-contained Nodeal icon used across the site
 assets/nodeal.png   supplied Nodeal bitmap, retained as provided
