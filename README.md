@@ -63,7 +63,7 @@ DESIGN.md           the design direction and the reason for each choice
 - Nodeal icon: self-contained vector mark in `assets/nodeal.svg`; the supplied bitmap remains at `assets/nodeal.png`.
 - Profile data and repository list: the public GitHub API, read in the browser at page load. Nothing is hardcoded, so the section always shows the live state. If the API is rate limited or unreachable, the page says so and links to GitHub instead.
 
-The antiexploit clips sit in a two-column grid inside one bordered frame; each cell keeps a 16/9 box so nothing reflows as the recordings load, and the caption row carries a 4px accent marker. Four clips fill a 2x2 grid with no CSS change, and the grid collapses to one column below 560px.
+The antiexploit clips sit in a grid that spans the full entry width, inside one bordered frame; each cell keeps a 16/9 box so nothing reflows as the recordings load, and the caption row carries a 4px accent marker. Three clips run three-up, four or more fall back to two-up, and the grid collapses to two-up below 900px and one column below 560px.
 
 The YouTube thumbnail tries the high-resolution image first, then falls back to the standard thumbnail; if neither is available, a text fallback still lets visitors play the video. After playback starts, a direct YouTube link remains available if the embed cannot load.
 

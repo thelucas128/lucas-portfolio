@@ -834,3 +834,22 @@ h1 {
 @media (prefers-reduced-motion: reduce) {
   .video-item, .facade-play svg { transition: none; }
 }
+
+/* The clips span the whole entry so the recordings stay legible, and the
+   bordered frame ends where the grid ends. */
+
+.entry--split .entry-media--clips {
+  grid-column: 1 / -1;
+  grid-row: 3;
+}
+
+.video-grid[data-clips="3"] { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+@media (max-width: 900px) {
+  .entry--split .entry-media--clips { grid-column: 1; grid-row: auto; }
+  .video-grid[data-clips="3"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 560px) {
+  .video-grid[data-clips="3"] { grid-template-columns: minmax(0, 1fr); }
+}

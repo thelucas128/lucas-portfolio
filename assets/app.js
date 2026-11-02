@@ -213,8 +213,8 @@
 
   function renderVideoList(list) {
     const clips = (list || []).filter((clip) => clip && clip.src);
-    const wrap = node('div', { class: 'entry-media' });
-    const grid = node('div', { class: 'video-grid' });
+    const wrap = node('div', { class: 'entry-media entry-media--clips' });
+    const grid = node('div', { class: 'video-grid', 'data-clips': String(clips.length) });
 
     clips.forEach((clip, index) => {
       const item = node('div', { class: 'video-item' });
