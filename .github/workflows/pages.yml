@@ -26,11 +26,14 @@ jobs:
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
+        with:
+          enablement: true
 
       - name: Prepare site artifact
         run: |
           mkdir _site
-          cp index.html enhancedreplication.mp4 npc-system.mp4 .nojekyll _site/
+          cp index.html .nojekyll _site/
+          cp *.mp4 _site/
           cp -r assets _site/assets
 
       - name: Upload site artifact
